@@ -4,6 +4,6 @@ namespace ElasticQueryBuilder.Interfaces;
 
 public interface IElasticSearchService
 {
-    Task<ElasticsearchClient> GetClient();
-    Task<string> IndexDocumentAsync<T>(T document, string indexName) where T : class;
+    ElasticsearchClient GetClient();
+    Task<List<string>> GetFieldsAsync(string indexName);
 }

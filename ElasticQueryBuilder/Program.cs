@@ -1,4 +1,5 @@
 
+using ElasticQueryBuilder.Interfaces;
 using ElasticQueryBuilder.Services;
 
 namespace ElasticQueryBuilder
@@ -13,7 +14,7 @@ namespace ElasticQueryBuilder
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddSingleton<ElasticSearchService>();
+            builder.Services.AddSingleton<IElasticSearchService, ElasticSearchService>();
 
             var app = builder.Build();
 
