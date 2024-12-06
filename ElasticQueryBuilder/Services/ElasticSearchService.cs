@@ -51,7 +51,7 @@ public class ElasticSearchService : IElasticSearchService
 
             foreach (var field in fields)
             {
-                fieldList.Add(field.Key.ToString());
+                fieldList.Add($" {field.Key.ToString()} - {field.Value.ToString()}");
             }
 
             return fieldList;
