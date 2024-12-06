@@ -1,6 +1,8 @@
 ﻿using Elastic.Clients.Elasticsearch.Nodes;
+using Elastic.Clients.Elasticsearch.Sql;
 using ElasticQueryBuilder.Interfaces;
 using ElasticQueryBuilder.Models;
+using ElasticQueryBuilder.Models.Dtos;
 using ElasticQueryBuilder.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +23,29 @@ public class QueryController : ControllerBase
         _elasticSearchService = elasticSearchService;
     }
 
+    [HttpPost("LoginElastic")]
+    public async Task<IActionResult> LoginElastic([FromBody] LoginRequest loginRequest)
+    {
+        if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Username) || string.IsNullOrEmpty(loginRequest.Password))
+            return BadRequest("Username and Password are required.");
+
+        try
+        {
+            var result = await _elasticSearchService.LoginElasticAsync(loginRequest);
+            if (string.IsNullOrEmpty(result))
+                return Unauthorized("Invalid credentials or failed to connect to ElasticSearch.");
+
+            return Ok("Login successful");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error occurred during login: {ex.Message}");
+        }
+    }
+
+
+
+
     [HttpGet("fields")]
     public async Task<IActionResult> GetFields(string index)
     {
@@ -38,31 +63,26 @@ public class QueryController : ControllerBase
         }
     }
 
-
-    [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Query query)
+    [HttpPost("build-query")]
+    public async Task<IActionResult> BuildQuery([FromBody] ElasticQueryBuilder.Models.Dtos.QueryRequest queryRequest)
     {
-        if (string.IsNullOrEmpty(query.Index) || string.IsNullOrEmpty(query.QueryString))
+        if (queryRequest == null || string.IsNullOrEmpty(queryRequest.Index))
+            return BadRequest("QueryRequest is required and must contain an index name.");
+
+        try
         {
-            return BadRequest("Index or QueryString is missing.");
+            var result = await _elasticSearchService.BuildQueryAsync(queryRequest);
+            return Ok(result);
         }
-
-        var client = _elasticSearchService.GetClient();
-
-        var response = await client.SearchAsync<object>(s => s
-            .Index(query.Index)
-            .Query(q => q
-                .QueryString(qs => qs
-                    .Query(query.QueryString)
-                )
-            )
-        );
-
-        if (!response.IsValidResponse)
+        catch (UnauthorizedAccessException)
         {
-            return StatusCode(500, response.DebugInformation);
+            return Unauthorized("User is not authenticated. Please log in first.");
         }
-
-        return Ok(response.Documents);
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error Occurred: {ex.Message}");
+        }
     }
+
+
 }
