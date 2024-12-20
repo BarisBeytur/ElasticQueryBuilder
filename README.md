@@ -80,7 +80,7 @@ dotnet run
    
    - 400 Bad Request: Missing or invalid input.
    - 401 Unauthorized: Authentication required or failed.
-   -m500 Internal Server Error: Unexpected server-side issues.
+   - 500 Internal Server Error: Unexpected server-side issues.
 
 **Contributing**
    - Feel free to fork the repository, create a feature branch, and submit a pull request. Contributions are welcome!
