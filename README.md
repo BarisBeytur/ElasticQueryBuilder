@@ -34,7 +34,7 @@ ElasticQueryBuilder is a .NET-based application that provides an interface for q
 2. Restore dependencies:
    dotnet restore
 
-3. Update the appsettings.json or environment variables with your Elasticsearch credentials.
+3. Create the appsettings.json or environment variables with your Elasticsearch credentials.
 
 4. Build and run the application:
 dotnet run
