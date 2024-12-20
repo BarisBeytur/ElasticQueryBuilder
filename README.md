@@ -28,7 +28,7 @@ ElasticQueryBuilder is a .NET-based application that provides an interface for q
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/ElasticQueryBuilder.git
+   git clone https://github.com/BarisBeytur/ElasticQueryBuilder.git
    cd ElasticQueryBuilder
 
 2. Restore dependencies:
