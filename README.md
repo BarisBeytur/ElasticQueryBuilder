@@ -43,9 +43,10 @@ dotnet run
 ## API Endpoints
 
 **Login to Elasticsearch**
-  Endpoint: /api/Query/LoginElastic
-  Method: POST
-  Request Body:
+  - Endpoint: /api/Query/LoginElastic
+  - Method: POST
+  - Request Body:
+  - ```bash
     {
       "username": "your-username",
       "password": "your-password",
