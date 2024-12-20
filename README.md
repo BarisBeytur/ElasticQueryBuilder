@@ -74,20 +74,21 @@ dotnet run
         }
       }
 
+
 **Error Handling**
-   The API returns appropriate HTTP status codes (400, 401, 500) along with error messages to help with debugging:
+   - The API returns appropriate HTTP status codes (400, 401, 500) along with error messages to help with debugging:
    
-   400 Bad Request: Missing or invalid input.
-   401 Unauthorized: Authentication required or failed.
-   500 Internal Server Error: Unexpected server-side issues.
+   - 400 Bad Request: Missing or invalid input.
+   - 401 Unauthorized: Authentication required or failed.
+   -m500 Internal Server Error: Unexpected server-side issues.
 
 **Contributing**
-   Feel free to fork the repository, create a feature branch, and submit a pull request. Contributions are welcome!
+   - Feel free to fork the repository, create a feature branch, and submit a pull request. Contributions are welcome!
 
 **License**
-   This project is licensed under the MIT License. See the LICENSE file for more details.
+   - This project is licensed under the MIT License. See the LICENSE file for more details.
 
 **Contact**
-   For any questions or support, please reach out to [beyturbaris@gmail.com].
+   - For any questions or support, please reach out to [beyturbaris@gmail.com].
    
 
