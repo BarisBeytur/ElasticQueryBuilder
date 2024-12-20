@@ -49,7 +49,7 @@ public class ElasticSearchService : IElasticSearchService
 
             foreach (var field in fields)
             {
-                fieldList.Add($" {field.Key.ToString()} - {field.Value.ToString()}");
+                fieldList.Add($" {field.Key.ToString()} : {field.Value.ToString().Split('.').Last()}");
             }
 
             return fieldList;
