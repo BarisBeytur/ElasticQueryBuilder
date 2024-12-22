@@ -46,9 +46,23 @@
             width: 100%;
         }
 
-            .filter-inputs input {
-                width: 48%;
+        .filter-inputs input {
+            width: 48%;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        @@media (max-width: 767px) {
+            .card-body {
+                padding: 1.5rem;
             }
+        }
     </style>
 </head>
 <body>
@@ -57,7 +71,7 @@
         <div class="row g-4">
 
             <!-- Login Form -->
-            <div class="col-md-4">
+            <div class="col-md-6 col-lg-4">
                 <div class="card border-primary">
                     <div class="card-header text-white bg-primary">Elasticsearch Credentials</div>
                     <div class="card-body">
@@ -85,7 +99,7 @@
             </div>
 
             <!-- Get Fields -->
-            <div class="col-md-4">
+            <div class="col-md-6 col-lg-4">
                 <div class="card border-success">
                     <div class="card-header text-white bg-success">Get Index Fields</div>
                     <div class="card-body">
@@ -102,7 +116,7 @@
             </div>
 
             <!-- Build Query -->
-            <div class="col-md-12">
+            <div class="col-md-12 col-lg-4">
                 <div class="card border-info">
                     <div class="card-header text-white bg-info">Build Query</div>
                     <div class="card-body">
@@ -138,7 +152,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        let elasticCredentials = {};
+
+        window.onload = function () {
+            const storedCredentials = JSON.parse(localStorage.getItem("elasticCredentials"));
+
+            if (storedCredentials) {
+                document.getElementById("username").value = storedCredentials.username || '';
+                document.getElementById("password").value = storedCredentials.password || '';
+                document.getElementById("fingerprint").value = storedCredentials.fingerprint || '';
+                document.getElementById("url").value = storedCredentials.url || '';
+            }
+        };
 
         function addFilter() {
             const filtersSection = document.getElementById("filtersSection");
@@ -161,9 +185,13 @@
             const fingerprint = document.getElementById("fingerprint").value;
             const url = document.getElementById("url").value;
 
-            elasticCredentials = { username, password, fingerprint, url };
+            if (!username || !password || !fingerprint || !url) {
+                alert("Please fill in all the fields.");
+                return;
+            }
 
-            // Store in localStorage for later use
+            const elasticCredentials = { username, password, fingerprint, url };
+
             localStorage.setItem("elasticCredentials", JSON.stringify(elasticCredentials));
 
             alert("Credentials successfuly stored!");
@@ -243,7 +271,6 @@
 
             fieldsResultDiv.innerHTML = tableHtml;
         }
-
 
         async function buildQuery() {
             const queryIndex = document.getElementById("queryIndex").value.trim();
