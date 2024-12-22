@@ -32,17 +32,23 @@ This project consists of two applications:
 
 Both applications must be running simultaneously for the project to function correctly.
 
+
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/BarisBeytur/ElasticQueryBuilder.git
    cd ElasticQueryBuilder
 
+
 2. Restore dependencies for both applications:
+
+   
    cd ElasticQueryBuilder
    dotnet restore
+
    
    cd ElasticQueryBuilder.Client
    dotnet restore
+
 
 4. Create the appsettings.json or environment variables with your Elasticsearch credentials. (optional)
 
