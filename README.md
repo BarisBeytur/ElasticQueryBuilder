@@ -41,12 +41,16 @@ Both applications must be running simultaneously for the project to function cor
 
 2. Restore dependencies for both applications:
 
-   
+   ```bash
    cd ElasticQueryBuilder
+
+   
    dotnet restore
 
    
    cd ElasticQueryBuilder.Client
+
+   
    dotnet restore
 
 
