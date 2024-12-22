@@ -4,6 +4,7 @@ using ElasticQueryBuilder.Interfaces;
 using ElasticQueryBuilder.Models;
 using ElasticQueryBuilder.Models.Dtos;
 using ElasticQueryBuilder.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,44 +17,29 @@ namespace ElasticQueryBuilder.Controllers;
 public class QueryController : ControllerBase
 {
 
-    private readonly IElasticSearchService _elasticSearchService;
-
-    public QueryController(IElasticSearchService elasticSearchService)
+    [HttpGet("fields/{index}")]
+    public async Task<IActionResult> GetFields([FromRoute] string index,
+                               [FromHeader(Name = "username")] string username,
+                               [FromHeader(Name = "password")] string password,
+                               [FromHeader(Name = "fingerprint")] string fingerprint,
+                               [FromHeader(Name = "url")] string url)
     {
-        _elasticSearchService = elasticSearchService;
-    }
 
-    [HttpPost("LoginElastic")]
-    public async Task<IActionResult> LoginElastic([FromBody] LoginRequest loginRequest)
-    {
-        if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Username) || string.IsNullOrEmpty(loginRequest.Password))
-            return BadRequest("Username and Password are required.");
-
-        try
+        var credentials = new ElasticCredentials
         {
-            var result = await _elasticSearchService.LoginElasticAsync(loginRequest);
-            if (string.IsNullOrEmpty(result))
-                return Unauthorized("Invalid credentials or failed to connect to ElasticSearch.");
+            Username = username,
+            Password = password,
+            Fingerprint = fingerprint,
+            Url = url
+        };
 
-            return Ok("Login successful");
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Error occurred during login: {ex.Message}");
-        }
-    }
-
-
-
-
-    [HttpGet("fields")]
-    public async Task<IActionResult> GetFields(string index)
-    {
         if (string.IsNullOrEmpty(index))
             return BadRequest("Index name is required.");
 
         try
         {
+            ElasticSearchService _elasticSearchService = new ElasticSearchService(credentials);
+
             var fields = await _elasticSearchService.GetFieldsAsync(index);
             return Ok(fields);
         }
@@ -64,14 +50,29 @@ public class QueryController : ControllerBase
     }
 
     [HttpPost("build-query")]
-    public async Task<IActionResult> BuildQuery([FromBody] ElasticQueryBuilder.Models.Dtos.QueryRequest queryRequest)
+    public async Task<IActionResult> BuildQuery([FromBody] ElasticQueryBuilder.Models.Dtos.QueryRequest queryRequest,
+                                                  [FromHeader(Name = "username")] string username,
+                                                  [FromHeader(Name = "password")] string password,
+                                                  [FromHeader(Name = "fingerprint")] string fingerprint,
+                                                  [FromHeader(Name = "url")] string url)
     {
         if (queryRequest == null || string.IsNullOrEmpty(queryRequest.Index))
             return BadRequest("QueryRequest is required and must contain an index name.");
 
+        var credentials = new ElasticCredentials
+        {
+            Username = username,
+            Password = password,
+            Fingerprint = fingerprint,
+            Url = url
+        };
+
         try
         {
+            ElasticSearchService _elasticSearchService = new ElasticSearchService(credentials);
+
             var result = await _elasticSearchService.BuildQueryAsync(queryRequest);
+
             return Ok(result);
         }
         catch (UnauthorizedAccessException)
@@ -83,6 +84,5 @@ public class QueryController : ControllerBase
             return StatusCode(500, $"Error Occurred: {ex.Message}");
         }
     }
-
 
 }

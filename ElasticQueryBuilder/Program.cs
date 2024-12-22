@@ -14,17 +14,13 @@ namespace ElasticQueryBuilder
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddSingleton<IElasticSearchService, ElasticSearchService>();
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
-                    policy =>
-                    {
-                        policy.AllowAnyOrigin()  
-                              .AllowAnyHeader()  
-                              .AllowAnyMethod(); 
-                    });
+                options.AddPolicy("AllowAll", builder =>
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader());
             });
 
             var app = builder.Build();
@@ -40,7 +36,6 @@ namespace ElasticQueryBuilder
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
