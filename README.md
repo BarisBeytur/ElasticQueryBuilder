@@ -38,7 +38,6 @@ Both applications must be running simultaneously for the project to function cor
    git clone https://github.com/BarisBeytur/ElasticQueryBuilder.git
    cd ElasticQueryBuilder
 
-
 2. Restore dependencies for both applications:
 
    ```bash
@@ -59,7 +58,6 @@ Both applications must be running simultaneously for the project to function cor
 
    cd ElasticQueryBuilder.Client
    dotnet run
-
    
 **Error Handling**
    - The API returns appropriate HTTP status codes (400, 401, 500) along with error messages to help with debugging:
