@@ -14,6 +14,8 @@ namespace ElasticQueryBuilder
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IElasticSearchService,ElasticSearchService>();
+
 
             builder.Services.AddCors(options =>
             {

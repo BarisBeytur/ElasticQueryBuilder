@@ -16,6 +16,12 @@ namespace ElasticQueryBuilder.Controllers;
 [ApiController]
 public class QueryController : ControllerBase
 {
+    private readonly IElasticSearchService _elasticSearchService;
+
+    public QueryController(IElasticSearchService elasticSearchService)
+    {
+        _elasticSearchService = elasticSearchService;
+    }
 
     [HttpGet("fields/{index}")]
     public async Task<IActionResult> GetFields([FromRoute] string index,
@@ -38,8 +44,7 @@ public class QueryController : ControllerBase
 
         try
         {
-            ElasticSearchService _elasticSearchService = new ElasticSearchService(credentials);
-
+            await _elasticSearchService.Configure(credentials);
             var fields = await _elasticSearchService.GetFieldsAsync(index);
             return Ok(fields);
         }
@@ -69,7 +74,7 @@ public class QueryController : ControllerBase
 
         try
         {
-            ElasticSearchService _elasticSearchService = new ElasticSearchService(credentials);
+            await _elasticSearchService.Configure(credentials);
 
             var result = await _elasticSearchService.BuildQueryAsync(queryRequest);
 

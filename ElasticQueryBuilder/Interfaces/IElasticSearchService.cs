@@ -7,4 +7,5 @@ public interface IElasticSearchService
 {
     Task<List<string>> GetFieldsAsync(string indexName);
     Task<object> BuildQueryAsync(QueryRequest queryRequest);
+    Task Configure(ElasticCredentials credentials);
 }

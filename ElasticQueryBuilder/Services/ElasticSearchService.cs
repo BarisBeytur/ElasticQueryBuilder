@@ -12,7 +12,7 @@ public class ElasticSearchService : IElasticSearchService
 
     private ElasticsearchClient _client;
 
-    public ElasticSearchService(ElasticCredentials credentials)
+    public async Task Configure(ElasticCredentials credentials)
     {
         var settings = new ElasticsearchClientSettings(new Uri(credentials.Url))
            .CertificateFingerprint(credentials.Fingerprint)
