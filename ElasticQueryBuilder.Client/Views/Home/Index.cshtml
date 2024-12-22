@@ -29,11 +29,26 @@
             font-weight: 600;
         }
 
-        pre {
-            background-color: #f1f1f1;
-            padding: 10px;
-            border-radius: 5px;
+        .filter-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
+
+        .filter-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-inputs {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+            .filter-inputs input {
+                width: 48%;
+            }
     </style>
 </head>
 <body>
@@ -87,7 +102,7 @@
             </div>
 
             <!-- Build Query -->
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <div class="card border-info">
                     <div class="card-header text-white bg-info">Build Query</div>
                     <div class="card-body">
@@ -96,11 +111,22 @@
                                 <label for="queryIndex" class="form-label">Index Name</label>
                                 <input type="text" id="queryIndex" class="form-control" placeholder="Enter index name">
                             </div>
-                            <div class="mb-3">
-                                <label for="filters" class="form-label">Filters (JSON Format)</label>
-                                <textarea id="filters" class="form-control" rows="4" placeholder='{"field1": "value1", "field2": "value2"}'></textarea>
+
+                            <!-- Filters Section (Field-Value Pairs) -->
+                            <div id="filtersSection" class="filter-section">
+                                <div class="filter-container">
+                                    <label class="form-label">Filter</label>
+                                    <div class="filter-inputs">
+                                        <input type="text" class="form-control filter-key" placeholder="Field Name">
+                                        <input type="text" class="form-control filter-value" placeholder="Field Value">
+                                    </div>
+                                </div>
                             </div>
-                            <button type="button" class="btn btn-info btn-custom" onclick="buildQuery()">Build Query</button>
+
+                            <!-- Add More Filters Button -->
+                            <button type="button" class="btn btn-secondary mt-4" onclick="addFilter()">+ Add Filter</button>
+
+                            <button type="button" class="btn btn-info btn-custom mt-3" onclick="buildQuery()">Build Query</button>
                         </form>
                         <div id="queryResult" class="mt-3"></div>
                     </div>
@@ -113,6 +139,21 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         let elasticCredentials = {};
+
+        function addFilter() {
+            const filtersSection = document.getElementById("filtersSection");
+
+            const newFilter = document.createElement("div");
+            newFilter.classList.add("filter-container");
+            newFilter.innerHTML = `
+                        <label class="form-label">Filter</label>
+                        <div class="filter-inputs">
+                            <input type="text" class="form-control filter-key" placeholder="Field Name">
+                            <input type="text" class="form-control filter-value" placeholder="Field Value">
+                        </div>
+                    `;
+            filtersSection.appendChild(newFilter);
+        }
 
         function loginElastic() {
             const username = document.getElementById("username").value;
@@ -204,10 +245,25 @@
         }
 
 
-
         async function buildQuery() {
             const queryIndex = document.getElementById("queryIndex").value.trim();
-            const filters = document.getElementById("filters").value.trim();
+            const filters = {};
+
+            const filterKeys = document.querySelectorAll(".filter-key");
+            const filterValues = document.querySelectorAll(".filter-value");
+
+            filterKeys.forEach((key, index) => {
+                const filterKey = key.value.trim();
+                const filterValue = filterValues[index].value.trim();
+                if (filterKey && filterValue) {
+                    filters[filterKey] = filterValue;
+                }
+            });
+
+            const queryRequest = {
+                index: queryIndex,
+                filters: filters
+            };
 
             const credentials = JSON.parse(localStorage.getItem("elasticCredentials"));
 
@@ -220,11 +276,6 @@
                 alert("Please enter an index name.");
                 return;
             }
-
-            const queryRequest = {
-                index: queryIndex,
-                filters: filters ? JSON.parse(filters) : {}
-            };
 
             const apiUrl = `https://localhost:7021/api/Query/build-query`;
 
@@ -245,7 +296,7 @@
 
                 if (response.ok) {
                     console.log("Query result:", data);
-                    // Burada gelen sonucu tablonun içinde gösterebilirsiniz
+                    // Display the result
                     document.getElementById("queryResult").innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
                 } else {
                     console.error("Error building query:", data);
