@@ -43,14 +43,10 @@ Both applications must be running simultaneously for the project to function cor
 
    ```bash
    cd ElasticQueryBuilder
-
-   
    dotnet restore
 
    
    cd ElasticQueryBuilder.Client
-
-   
    dotnet restore
 
 
