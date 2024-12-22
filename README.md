@@ -91,7 +91,6 @@ dotnet run
 **Contact**
    - For any questions or support, please reach out to [beyturbaris@gmail.com].
 
--
 
 ![image](https://github.com/user-attachments/assets/d90c4717-4a6a-4a2b-90b0-f48cc9bb9277)
 
