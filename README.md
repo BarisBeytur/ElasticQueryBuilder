@@ -26,55 +26,33 @@ ElasticQueryBuilder is a .NET-based application that provides an interface for q
 
 ## Installation
 
-1. Clone the repository:
+This project consists of two applications:
+1. **.NET Core Web API**: Provides the backend API for querying Elasticsearch.
+2. **.NET Core MVC UI**: A front-end interface for interacting with the Elasticsearch query builder.
+
+Both applications must be running simultaneously for the project to function correctly.
+
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/BarisBeytur/ElasticQueryBuilder.git
    cd ElasticQueryBuilder
 
-2. Restore dependencies:
+2. Restore dependencies for both applications:
+   cd ElasticQueryBuilder
+   dotnet restore
+   
+   cd ElasticQueryBuilder.Client
    dotnet restore
 
-3. Create the appsettings.json or environment variables with your Elasticsearch credentials.
+4. Create the appsettings.json or environment variables with your Elasticsearch credentials. (optional)
 
-4. Build and run the application:
-dotnet run
+5. Build and run the application:
+   cd ElasticQueryBuilder
+   dotnet run
 
-
-## API Endpoints
-
-**Login to Elasticsearch**
-  - Endpoint: /api/Query/LoginElastic
-  - Method: POST
-  - Request Body:
-    ```bash
-    {
-      "username": "your-username",
-      "password": "your-password",
-      "fingerPrint": "your-ssl-fingerprint",
-      "url": "https://your-elastic-url"
-    }
-
-
-**Get Index Fields**
-   - Endpoint: /api/Query/fields
-   - Method: GET
-   - Query Parameter:
-         index: The name of the index to retrieve fields from.
-
-**Build Query**
-   - Endpoint: /api/Query/build-query
-   - Method: POST
-   - Request Body:
-     ```bash
-      {
-        "index": "index-name",
-        "filters": {
-          "fieldName1": "value1",
-          "fieldName2": "value2"
-        }
-      }
-
-
+   cd ElasticQueryBuilder.Client
+   dotnet run
+   
 **Error Handling**
    - The API returns appropriate HTTP status codes (400, 401, 500) along with error messages to help with debugging:
    
