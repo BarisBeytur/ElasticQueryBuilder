@@ -48,16 +48,18 @@ Both applications must be running simultaneously for the project to function cor
    
    cd ElasticQueryBuilder.Client
    dotnet restore
-
-
+   
 4. Create the appsettings.json or environment variables with your Elasticsearch credentials. (optional)
 
 5. Build and run the application:
+
+   ```bash
    cd ElasticQueryBuilder
    dotnet run
 
    cd ElasticQueryBuilder.Client
    dotnet run
+
    
 **Error Handling**
    - The API returns appropriate HTTP status codes (400, 401, 500) along with error messages to help with debugging:
